@@ -63,7 +63,7 @@ class PopularStoreView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 175,
+                  height: isFeatured ? 190 : 175,
                   child: storeList != null
                       ? ListView.builder(
                           controller: ScrollController(),
@@ -336,7 +336,9 @@ class PopularStoreView extends StatelessWidget {
                             );
                           },
                         )
-                      : PopularStoreShimmer(storeController: storeController),
+                      : PopularStoreShimmer(
+                          storeController: storeController,
+                          isFeatured: isFeatured),
                 ),
               ],
             );
@@ -346,7 +348,9 @@ class PopularStoreView extends StatelessWidget {
 
 class PopularStoreShimmer extends StatelessWidget {
   final StoreController storeController;
-  const PopularStoreShimmer({super.key, required this.storeController});
+  final bool isFeatured;
+  const PopularStoreShimmer(
+      {super.key, required this.storeController, this.isFeatured = false});
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +362,7 @@ class PopularStoreShimmer extends StatelessWidget {
       itemCount: 10,
       itemBuilder: (context, index) {
         return Container(
-          height: 150,
+          height: isFeatured ? 210 : 150,
           width: 200,
           margin: const EdgeInsets.only(
               right: Dimensions.paddingSizeSmall, bottom: 5),

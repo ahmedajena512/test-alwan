@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sixam_mart/common/widgets/custom_button.dart';
 import 'package:sixam_mart/common/widgets/custom_ink_well.dart';
@@ -61,48 +62,34 @@ class ManualLoginWidget extends StatelessWidget {
         CustomTextField(
           onCountryChanged: (countryCode) =>
               authController.countryDialCode = countryCode.dialCode!,
-          countryDialCode: authController.isNumberLogin
-              ? authController.countryDialCode
-              : null,
-          labelText: 'email_or_phone'.tr,
-          titleText: 'enter_email_or_phone'.tr,
+          countryDialCode: authController.countryDialCode,
+          labelText: 'phone'.tr,
+          titleText: 'enter_phone_number'.tr,
           controller: phoneController,
           focusNode: phoneFocus,
           nextFocus: passwordFocus,
-          inputType: TextInputType.emailAddress,
-          prefixImage:
-              authController.isNumberLogin ? null : Images.emailWithPhoneIcon,
+          inputType: TextInputType.phone,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          prefixImage: null,
           onChanged: (String text) {
-            final numberRegExp = RegExp(r'^[+]?[0-9]+$');
-            final notNumberRegExp = RegExp(r'[^0-9+]');
-
-            if (text.isEmpty && authController.isNumberLogin) {
-              authController.toggleIsNumberLogin();
-            }
-            if (text.startsWith(numberRegExp) &&
-                !text.contains(notNumberRegExp) &&
-                !authController.isNumberLogin) {
-              authController.toggleIsNumberLogin();
-              phoneController.text = text.replaceAll("+", "");
-            }
-            final emailRegExp = RegExp(r'@');
-            if ((text.contains(emailRegExp) ||
-                    text.contains(notNumberRegExp)) &&
-                authController.isNumberLogin) {
-              authController.toggleIsNumberLogin();
+            if (!authController.isNumberLogin) {
+              authController.toggleIsNumberLogin(value: true);
             }
           },
           validator: (String? value) {
-            if (authController.isNumberLogin &&
-                ValidateCheck.getValidPhone(
-                        authController.countryDialCode + value!) ==
-                    "") {
+            String numberWithCountryCode =
+                authController.countryDialCode + value!;
+            bool isValid = false;
+            try {
+              isValid = GetUtils.isPhoneNumber(numberWithCountryCode);
+            } catch (e) {
+              isValid = false;
+            }
+
+            if (ValidateCheck.getValidPhone(numberWithCountryCode) == "") {
               return "enter_valid_phone_number".tr;
             }
-            return (GetUtils.isPhoneNumber(value!.tr) ||
-                    GetUtils.isEmail(value.tr))
-                ? null
-                : 'enter_email_address_or_phone_number'.tr;
+            return null;
           },
         ),
         const SizedBox(height: Dimensions.paddingSizeExtraLarge),
@@ -262,50 +249,27 @@ class ManualLoginWidget extends StatelessWidget {
             CustomTextField(
               onCountryChanged: (countryCode) =>
                   authController.countryDialCode = countryCode.dialCode!,
-              countryDialCode: authController.isNumberLogin
-                  ? authController.countryDialCode
-                  : null,
-              labelText: 'email_or_phone'.tr,
-              titleText: 'enter_email_or_phone'.tr,
+              countryDialCode: authController.countryDialCode,
+              labelText: 'phone'.tr,
+              titleText: 'enter_phone_number'.tr,
               controller: phoneController,
               focusNode: phoneFocus,
               nextFocus: passwordFocus,
-              prefixImage: authController.isNumberLogin
-                  ? null
-                  : Images.emailWithPhoneIcon,
-              inputType: TextInputType.emailAddress,
+              prefixImage: null,
+              inputType: TextInputType.phone,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               onChanged: (String text) {
-                final numberRegExp = RegExp(r'^[+]?[0-9]+$');
-
-                // Toggle isNumberLogin flag based on input
-                if (text.isEmpty && authController.isNumberLogin) {
-                  authController.toggleIsNumberLogin();
-                } else if (text.startsWith(numberRegExp) &&
-                    !authController.isNumberLogin) {
-                  authController.toggleIsNumberLogin();
-                  // Store the cleaned number temporarily
-                  final cleanedText = text.replaceAll("+", "");
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    phoneController.text = cleanedText;
-                    phoneController.selection = TextSelection.fromPosition(
-                      TextPosition(offset: phoneController.text.length),
-                    );
-                  });
-                } else if (text.contains('@') && authController.isNumberLogin) {
-                  authController.toggleIsNumberLogin();
+                if (!authController.isNumberLogin) {
+                  authController.toggleIsNumberLogin(value: true);
                 }
               },
               validator: (String? value) {
-                if (authController.isNumberLogin &&
-                    ValidateCheck.getValidPhone(
-                            authController.countryDialCode + value!) ==
-                        "") {
+                if (ValidateCheck.getValidPhone(
+                        authController.countryDialCode + value!) ==
+                    "") {
                   return "enter_valid_phone_number".tr;
                 }
-                return (GetUtils.isPhoneNumber(value!.tr) ||
-                        GetUtils.isEmail(value.tr))
-                    ? null
-                    : 'enter_email_address_or_phone_number'.tr;
+                return null;
               },
             ),
             const SizedBox(height: Dimensions.paddingSizeExtraLarge),

@@ -24,6 +24,7 @@ class ItemCard extends StatelessWidget {
   final bool isFood;
   final bool isShop;
   final bool isPopularItemCart;
+  final bool showRating;
   final int? index;
   const ItemCard(
       {super.key,
@@ -32,6 +33,7 @@ class ItemCard extends StatelessWidget {
       required this.isFood,
       required this.isShop,
       this.isPopularItemCart = false,
+      this.showRating = true,
       this.index});
 
   @override
@@ -188,7 +190,9 @@ class ItemCard extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           )
-                                        : item.ratingCount! > 0
+                                        : (item.ratingCount! > 0 &&
+                                                !isPopularItem &&
+                                                showRating)
                                             ? Row(
                                                 mainAxisAlignment: isPopularItem
                                                     ? MainAxisAlignment.center
@@ -223,7 +227,9 @@ class ItemCard extends StatelessWidget {
 
                                     // showUnitOrRattings(context);
                                     (isFood || isShop)
-                                        ? item.ratingCount! > 0
+                                        ? (item.ratingCount! > 0 &&
+                                                !isPopularItem &&
+                                                showRating)
                                             ? Row(
                                                 mainAxisAlignment: isPopularItem
                                                     ? MainAxisAlignment.center

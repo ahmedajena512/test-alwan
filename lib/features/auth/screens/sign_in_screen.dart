@@ -136,14 +136,21 @@ class SignInScreenState extends State<SignInScreen> {
                             ],
                           ),
                     child: SingleChildScrollView(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SignInView(
                                 exitFromApp: widget.exitFromApp,
                                 backFromThis: widget.backFromThis,
                                 fromResetPassword: widget.fromResetPassword),
-                          ]),
+                            const SizedBox(height: Dimensions.paddingSizeSmall),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

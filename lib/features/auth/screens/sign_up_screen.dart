@@ -97,9 +97,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ],
                     ),
-                    child: SafeArea(
-                      top: false,
-                      child: SingleChildScrollView(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom,
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

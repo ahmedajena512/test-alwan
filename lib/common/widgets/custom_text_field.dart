@@ -48,6 +48,7 @@ class CustomTextField extends StatefulWidget {
   final bool fromUpdateProfile;
   final double borderRadius;
   final Color? borderColor;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -89,6 +90,7 @@ class CustomTextField extends StatefulWidget {
     this.fromUpdateProfile = false,
     this.borderRadius = 50,
     this.borderColor = const Color(0xFF5cbf47),
+    this.inputFormatters,
   });
 
   @override
@@ -144,15 +146,19 @@ class CustomTextFieldState extends State<CustomTextField> {
             enabled: widget.isEnabled,
             autofocus: false,
             obscureText: widget.isPassword ? _obscureText : false,
-            inputFormatters: widget.inputType == TextInputType.phone
-                ? <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp('[0-9]'))
-                  ]
-                : widget.isAmount
-                    ? [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))]
-                    : widget.isNumber
-                        ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
-                        : null,
+            inputFormatters: widget.inputFormatters ??
+                (widget.inputType == TextInputType.phone
+                    ? <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp('[0-9]'))
+                      ]
+                    : widget.isAmount
+                        ? [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d*\.?\d*'))
+                          ]
+                        : widget.isNumber
+                            ? [FilteringTextInputFormatter.allow(RegExp(r'\d'))]
+                            : null),
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(widget.borderRadius),

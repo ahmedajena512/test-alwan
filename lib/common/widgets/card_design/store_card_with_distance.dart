@@ -193,31 +193,35 @@ class StoreCardWithDistance extends StatelessWidget {
                               const SizedBox(height: 6),
 
                               // Rating
-                              Row(
-                                children: [
-                                  ShaderMask(
-                                    shaderCallback: (bounds) => AppColors
-                                        .mainGradient
-                                        .createShader(bounds),
-                                    child: const Icon(Icons.star,
-                                        color: Colors.white, size: 15),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${store.avgRating}',
-                                    style: robotoBold.copyWith(
-                                        fontSize: Dimensions.fontSizeSmall),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '(${store.ratingCount})',
-                                    style: robotoRegular.copyWith(
-                                      fontSize: Dimensions.fontSizeSmall,
-                                      color: Theme.of(context).disabledColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              ((store.avgRating ?? 0) > 0 && !recommendedStore)
+                                  ? Row(
+                                      children: [
+                                        ShaderMask(
+                                          shaderCallback: (bounds) => AppColors
+                                              .mainGradient
+                                              .createShader(bounds),
+                                          child: const Icon(Icons.star,
+                                              color: Colors.white, size: 15),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '${store.avgRating}',
+                                          style: robotoBold.copyWith(
+                                              fontSize:
+                                                  Dimensions.fontSizeSmall),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '(${store.ratingCount})',
+                                          style: robotoRegular.copyWith(
+                                            fontSize: Dimensions.fontSizeSmall,
+                                            color:
+                                                Theme.of(context).disabledColor,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),

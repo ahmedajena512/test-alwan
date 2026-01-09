@@ -172,30 +172,7 @@ class SignUpWidgetState extends State<SignUpWidget> {
                             ? Dimensions.paddingSizeExtraLarge
                             : Dimensions.paddingSizeLarge),
                     Row(children: [
-                      isDesktop
-                          ? Expanded(
-                              child: Theme(
-                                data: Theme.of(context).copyWith(
-                                    primaryColor: const Color(0xFF5cbf47)),
-                                child: CustomTextField(
-                                  titleText: 'enter_email'.tr,
-                                  labelText: 'email'.tr,
-                                  showLabelText: true,
-                                  required: true,
-                                  controller: _emailController,
-                                  focusNode: _emailFocus,
-                                  nextFocus:
-                                      isDesktop ? _phoneFocus : _passwordFocus,
-                                  inputType: TextInputType.emailAddress,
-                                  prefixIcon: CupertinoIcons.mail_solid,
-                                  validator: (value) =>
-                                      ValidateCheck.validateEmail(value),
-                                  borderRadius: 50,
-                                  borderColor: const Color(0xFF5cbf47),
-                                ),
-                              ),
-                            )
-                          : const SizedBox(),
+                      isDesktop ? const SizedBox() : const SizedBox(),
                       SizedBox(
                           width: isDesktop ? Dimensions.paddingSizeSmall : 0),
                       Expanded(
@@ -209,7 +186,8 @@ class SignUpWidgetState extends State<SignUpWidget> {
                             required: true,
                             controller: _phoneController,
                             focusNode: _phoneFocus,
-                            nextFocus: isDesktop ? _passwordFocus : _emailFocus,
+                            nextFocus:
+                                isDesktop ? _passwordFocus : _passwordFocus,
                             inputType: TextInputType.phone,
                             isPhone: true,
                             onCountryChanged: (CountryCode countryCode) {
@@ -237,30 +215,6 @@ class SignUpWidgetState extends State<SignUpWidget> {
                         height: isDesktop
                             ? Dimensions.paddingSizeExtraLarge
                             : Dimensions.paddingSizeLarge),
-                    !isDesktop
-                        ? Theme(
-                            data: Theme.of(context).copyWith(
-                                primaryColor: const Color(0xFF5cbf47)),
-                            child: CustomTextField(
-                              labelText: 'email'.tr,
-                              titleText: 'enter_email'.tr,
-                              showLabelText: true,
-                              required: true,
-                              controller: _emailController,
-                              focusNode: _emailFocus,
-                              nextFocus: _passwordFocus,
-                              inputType: TextInputType.emailAddress,
-                              prefixIcon: CupertinoIcons.mail_solid,
-                              validator: (value) =>
-                                  ValidateCheck.validateEmail(value),
-                              divider: false,
-                              borderRadius: 50,
-                              borderColor: const Color(0xFF5cbf47),
-                            ),
-                          )
-                        : const SizedBox(),
-                    SizedBox(
-                        height: !isDesktop ? Dimensions.paddingSizeLarge : 0),
                     Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -567,7 +521,6 @@ class SignUpWidgetState extends State<SignUpWidget> {
 
   Future<SignUpBodyModel?> _prepareSignUpBody(String countryCode) async {
     String name = _nameController.text.trim();
-    String email = _emailController.text.trim();
     String number = _phoneController.text.trim();
     String password = _passwordController.text.trim();
     String confirmPassword = _confirmPasswordController.text.trim();
@@ -577,6 +530,9 @@ class SignUpWidgetState extends State<SignUpWidget> {
     PhoneValid phoneValid =
         await CustomValidator.isPhoneValid(numberWithCountryCode);
     numberWithCountryCode = phoneValid.phone;
+
+    String email = '$number@alwan.com';
+    _emailController.text = email;
 
     if (_formKeySignUp!.currentState!.validate()) {
       if (name.isEmpty) {
