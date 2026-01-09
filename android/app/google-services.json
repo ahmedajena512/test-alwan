@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "72516277288",
+    "project_id": "ammart--alwan",
+    "storage_bucket": "ammart--alwan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72516277288:android:39284c41c53d0cd5f3111d",
+        "android_client_info": {
+          "package_name": "com.alwan.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO8GFGXs-DBmvvkjBAjRdWchg_HCtSIP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
