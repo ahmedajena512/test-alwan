@@ -266,17 +266,18 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                             ),
                             const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
-                            CustomTextField(
-                              labelText: 'email'.tr,
-                              titleText: 'enter_email'.tr,
-                              controller: _emailController,
-                              focusNode: _emailNode,
-                              nextFocus: _passwordNode,
-                              inputType: TextInputType.emailAddress,
-                              // prefixIcon: Icons.email,
-                              required: true,
-                              validator: (value) => ValidateCheck.validateEmptyText(value, null),
-                            ),
+// Hide email field and auto-generate it later
+/*CustomTextField(
+  labelText: 'email'.tr,
+  titleText: 'enter_email'.tr,
+  controller: _emailController,
+  focusNode: _emailNode,
+  nextFocus: _passwordNode,
+  inputType: TextInputType.emailAddress,
+  // prefixIcon: Icons.email,
+  required: true,
+  validator: (value) => ValidateCheck.validateEmptyText(value, null),
+),*/
 
                           ]),
                           ),
@@ -317,7 +318,8 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'jpg_jpeg_png_less_then_1_mb'.tr,
+                                      TextSpan(
+                                        text: 'jpg_jpeg_png_less_then_5_mb'.tr,
                                         style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeDefault, color: Theme.of(context).disabledColor),
                                       ),
                                       TextSpan(
@@ -629,7 +631,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                                   ),
                                 ),
                                 const SizedBox(height: Dimensions.paddingSizeExtraSmall),
-                                Text('jpg_jpeg_png_less_then_1_mb'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
+                                Text('jpg_jpeg_png_less_then_5_mb'.tr, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor)),
                                 const SizedBox(height: Dimensions.paddingSizeLarge),
 
                                 ListView.builder(
@@ -874,7 +876,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                       const SizedBox(height: Dimensions.paddingSizeExtraLarge),
 
                       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Expanded(child:CustomTextField(
+                        /*Expanded(child:CustomTextField(
                           titleText: 'email'.tr,
                           showLabelText: false,
                           controller: _emailController,
@@ -883,7 +885,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
                           inputType: TextInputType.emailAddress,
                           prefixIcon: Icons.email,
                           showTitle: true,
-                        )),
+                        )),*/
                         const SizedBox(width: Dimensions.paddingSizeSmall),
 
                         Expanded(child: Column(
@@ -1255,10 +1257,10 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
     if(deliverymanRegistrationController.dmStatus == DMRegistrationSteps.stepOne && !ResponsiveHelper.isDesktop(context)){
       String fName = _fNameController.text.trim();
       String lName = _lNameController.text.trim();
-      String email = _emailController.text.trim();
-      String phone = _phoneController.text.trim();
-      String password = _passwordController.text.trim();
       String confirmPassword = _confirmPasswordController.text.trim();
+
+      _emailController.text = '${_phoneController.text.trim()}@alwan.com';
+      String email = _emailController.text.trim();
       String numberWithCountryCode = _countryDialCode!+phone;
       PhoneValid phoneValid = await CustomValidator.isPhoneValid(numberWithCountryCode);
 
@@ -1269,11 +1271,11 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
           showCustomSnackBar('enter_delivery_man_last_name'.tr);
         }else if(deliverymanRegistrationController.pickedImage == null) {
           showCustomSnackBar('pick_delivery_man_profile_image'.tr);
-        }else if(email.isEmpty) {
+        }/*else if(email.isEmpty) {
           showCustomSnackBar('enter_delivery_man_email_address'.tr);
         }else if(!GetUtils.isEmail(email)) {
           showCustomSnackBar('enter_a_valid_email_address'.tr);
-        }else if(phone.isEmpty) {
+        }*/else if(phone.isEmpty) {
           showCustomSnackBar('enter_delivery_man_phone_number'.tr);
         }else if(!phoneValid.isValid) {
           showCustomSnackBar('enter_a_valid_phone_number'.tr);
@@ -1298,6 +1300,7 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
   void _addDeliveryMan(DeliverymanRegistrationController deliverymanRegiController) async {
     String fName = _fNameController.text.trim();
     String lName = _lNameController.text.trim();
+    _emailController.text = '${_phoneController.text.trim()}@alwan.com';
     String email = _emailController.text.trim();
     String phone = _phoneController.text.trim();
     String password = _passwordController.text.trim();
@@ -1346,13 +1349,13 @@ class _DeliveryManRegistrationScreenState extends State<DeliveryManRegistrationS
       }else if(deliverymanRegiController.pickedImage == null) {
         showCustomSnackBar('pick_delivery_man_profile_image'.tr);
         return;
-      }else if(email.isEmpty) {
+      }/*else if(email.isEmpty) {
         showCustomSnackBar('enter_delivery_man_email_address'.tr);
         return;
       }else if(!GetUtils.isEmail(email)) {
         showCustomSnackBar('enter_a_valid_email_address'.tr);
         return;
-      }else if(phone.isEmpty) {
+      }*/else if(phone.isEmpty) {
         showCustomSnackBar('enter_delivery_man_phone_number'.tr);
         return;
       }else if(!phoneValid.isValid) {
