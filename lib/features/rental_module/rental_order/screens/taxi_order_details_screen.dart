@@ -178,7 +178,7 @@ class _TaxiOrderDetailsScreenState extends State<TaxiOrderDetailsScreen> {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.radiusSmall)),
                             elevation: 0,
                           ),
-                          child: Text('cancel_booking'.tr, style: robotoBold.copyWith(color: Colors.grey.shade700)),
+                          child: Text('cancel_booking'.tr, style: robotoBold.copyWith(color: Theme.of(context).textTheme.bodyLarge!.color)),
                         ),
                       ]),
                     ) : const SizedBox(),
