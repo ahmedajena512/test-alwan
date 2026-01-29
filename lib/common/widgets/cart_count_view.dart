@@ -29,8 +29,14 @@ class CartCountView extends StatelessWidget {
                       BorderRadius.circular(Dimensions.radiusExtraLarge),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black12, blurRadius: 5, spreadRadius: 1)
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3))
                   ],
+                  border: Border.all(
+                      color: Theme.of(context)
+                          .primaryColor
+                          .withValues(alpha: 0.1)),
                 ),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,10 +67,14 @@ class CartCountView extends StatelessWidget {
                             // border: Border.all(color: Theme.of(context).primaryColor),
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black12,
+                                  color: Colors.black.withValues(alpha: 0.05),
                                   blurRadius: 5,
-                                  spreadRadius: 1)
+                                  offset: const Offset(0, 2))
                             ],
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .disabledColor
+                                    .withValues(alpha: 0.1)),
                           ),
                           padding: const EdgeInsets.all(
                               Dimensions.paddingSizeExtraSmall),
@@ -111,9 +121,11 @@ class CartCountView extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 5,
-                                  spreadRadius: 1)
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withValues(alpha: 0.3),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4))
                             ],
                             border:
                                 Border.all(color: Theme.of(context).cardColor),
@@ -145,11 +157,13 @@ class CartCountView extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 5,
-                            spreadRadius: 1)
+                            color: Theme.of(context)
+                                .primaryColor
+                                .withValues(alpha: 0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4))
                       ],
                     ),
                     child: Icon(Icons.add,

@@ -1434,15 +1434,14 @@ class _StoreScreenState extends State<StoreScreen> {
                                                                           .categoryIndex
                                                                   ? robotoMedium.copyWith(
                                                                       fontSize:
-                                                                          Dimensions
-                                                                              .fontSizeSmall,
+                                                                          14,
                                                                       color: Theme.of(
                                                                               context)
                                                                           .primaryColor)
                                                                   : robotoRegular
                                                                       .copyWith(
                                                                           fontSize:
-                                                                              Dimensions.fontSizeSmall),
+                                                                              14),
                                                             ),
                                                           ]),
                                                     ),

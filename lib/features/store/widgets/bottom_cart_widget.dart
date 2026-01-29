@@ -34,31 +34,52 @@ class BottomCartWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, -5),
-                      spreadRadius: -5,
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 25,
+                      offset: const Offset(0, -10),
                     )
                   ],
                   border: Border.all(
                       color: Theme.of(context)
-                          .disabledColor
-                          .withValues(alpha: 0.1)),
+                          .primaryColor
+                          .withValues(alpha: 0.05)),
                 ),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     textDirection: TextDirection.ltr,
                     children: [
-                      CustomButton(
-                        buttonText: 'view_cart'.tr,
+                      Container(
                         width: 140,
                         height: 50,
-                        radius: 15,
-                        icon: Get.find<LocalizationController>().isLtr
-                            ? Icons.arrow_back
-                            : Icons.arrow_forward,
-                        onPressed: () =>
-                            Get.toNamed(RouteHelper.getCartRoute()),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.mainGradient,
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusLarge),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context)
+                                  .primaryColor
+                                  .withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            )
+                          ],
+                        ),
+                        child: CustomButton(
+                          buttonText: 'view_cart'.tr,
+                          color: Colors.transparent,
+                          textColor: Colors.white,
+                          iconColor: Colors.white,
+                          transparent: true,
+                          width: 140,
+                          height: 50,
+                          radius: Dimensions.radiusLarge,
+                          icon: Get.find<LocalizationController>().isLtr
+                              ? Icons.arrow_forward_rounded
+                              : Icons.arrow_back_rounded,
+                          onPressed: () =>
+                              Get.toNamed(RouteHelper.getCartRoute()),
+                        ),
                       ),
                       const Spacer(),
                       Row(

@@ -174,7 +174,7 @@ class CategoryView extends StatelessWidget {
                                                                     index]
                                                                 .name!,
                                                         style: robotoMedium.copyWith(
-                                                            fontSize: 11,
+                                                            fontSize: 14,
                                                             color: (index ==
                                                                         9 &&
                                                                     categoryController
@@ -397,7 +397,7 @@ class PharmacyCategoryView extends StatelessWidget {
                                 ? 'see_all'.tr
                                 : categoryController.categoryList![index].name!,
                             style: robotoMedium.copyWith(
-                                fontSize: Dimensions.fontSizeSmall,
+                                fontSize: 14,
                                 color: (index == 9 &&
                                         categoryController
                                                 .categoryList!.length >
@@ -433,7 +433,7 @@ class FoodCategoryView extends StatelessWidget {
     return Stack(children: [
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(
-          height: 160,
+          height: 110,
           child: categoryController.categoryList != null
               ? ListView.builder(
                   controller: scrollController,
@@ -537,7 +537,7 @@ class FoodCategoryView extends StatelessWidget {
                                           .categoryList![index].name ??
                                       '',
                               style: robotoMedium.copyWith(
-                                  fontSize: Dimensions.fontSizeSmall,
+                                  fontSize: 14,
                                   color: (index == 9 &&
                                           categoryController
                                                   .categoryList!.length >

@@ -92,11 +92,17 @@ class ItemWidget extends StatelessWidget {
               ? null
               : const EdgeInsets.only(bottom: Dimensions.paddingSizeSmall),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
+            borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
             color: Theme.of(context).cardColor,
-            boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 1)
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              )
             ],
+            border: Border.all(
+                color: Theme.of(context).disabledColor.withValues(alpha: 0.1)),
           ),
           child: CustomInkWell(
             onTap: () {
@@ -143,335 +149,301 @@ class ItemWidget extends StatelessWidget {
                     horizontal: Dimensions.paddingSizeSmall,
                     vertical: Dimensions.paddingSizeExtraSmall),
             child: TextHover(builder: (hovered) {
-              return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical:
-                              desktop ? 0 : Dimensions.paddingSizeExtraSmall),
-                      child: Row(children: [
-                        Stack(children: [
-                          ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.radiusDefault),
-                            child: CustomImage(
-                              isHovered: hovered,
-                              image:
-                                  '${isStore ? store != null ? store!.logoFullUrl : '' : item!.imageFullUrl}',
-                              height: imageHeight ??
-                                  (desktop
-                                      ? 120
-                                      : length == null
-                                          ? 100
-                                          : 90),
-                              width: imageWidth ?? (desktop ? 120 : 90),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          (isStore || isCornerTag!)
-                              ? DiscountTag(
-                                  discount: discount,
-                                  discountType: discountType,
-                                  freeDelivery:
-                                      isStore ? store!.freeDelivery : false,
-                                )
-                              : const SizedBox(),
-                          !isStore
-                              ? OrganicTag(item: item!, placeInImage: true)
-                              : const SizedBox(),
-                          isAvailable
-                              ? const SizedBox()
-                              : NotAvailableWidget(isStore: isStore),
-                        ]),
-                        const SizedBox(width: Dimensions.paddingSizeSmall),
-                        Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
+              return Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: desktop ? 0 : Dimensions.paddingSizeExtraSmall),
+                child: Row(children: [
+                  Stack(children: [
+                    ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radiusDefault),
+                      child: CustomImage(
+                        isHovered: hovered,
+                        image:
+                            '${isStore ? store != null ? store!.logoFullUrl : '' : item!.imageFullUrl}',
+                        height: imageHeight ??
+                            (desktop
+                                ? 120
+                                : length == null
+                                    ? 100
+                                    : 90),
+                        width: imageWidth ?? (desktop ? 120 : 90),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    (isStore || isCornerTag!)
+                        ? DiscountTag(
+                            discount: discount,
+                            discountType: discountType,
+                            freeDelivery: isStore ? store!.freeDelivery : false,
+                          )
+                        : const SizedBox(),
+                    !isStore
+                        ? OrganicTag(item: item!, placeInImage: true)
+                        : const SizedBox(),
+                    isAvailable
+                        ? const SizedBox()
+                        : NotAvailableWidget(isStore: isStore),
+                  ]),
+                  const SizedBox(width: Dimensions.paddingSizeSmall),
+                  Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          isStore ? store!.name! : item!.name!,
-                                          style: robotoMedium.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                          width:
-                                              Dimensions.paddingSizeExtraSmall),
-                                      (!isStore &&
-                                              Get.find<SplashController>()
-                                                  .configModel!
-                                                  .moduleConfig!
-                                                  .module!
-                                                  .vegNonVeg! &&
-                                              Get.find<SplashController>()
-                                                  .configModel!
-                                                  .toggleVegNonVeg!)
-                                          ? Image.asset(
-                                              item != null && item!.veg == 0
-                                                  ? Images.nonVegImage
-                                                  : Images.vegImage,
-                                              height: 10,
-                                              width: 10,
-                                              fit: BoxFit.contain)
-                                          : const SizedBox(),
-                                      (Get.find<SplashController>()
-                                                  .configModel!
-                                                  .moduleConfig!
-                                                  .module!
-                                                  .unit! &&
-                                              item != null &&
-                                              item!.unitType != null)
-                                          ? Text(
-                                              '(${item!.unitType ?? ''})',
-                                              style: robotoRegular.copyWith(
-                                                  fontSize: Dimensions
-                                                      .fontSizeExtraSmall,
-                                                  color: Theme.of(context)
-                                                      .hintColor),
-                                            )
-                                          : const SizedBox(),
-                                      SizedBox(
-                                          width: item!.isStoreHalalActive! &&
-                                                  item!.isHalalItem!
-                                              ? Dimensions.paddingSizeExtraSmall
-                                              : 0),
-                                      !isStore &&
-                                              item!.isStoreHalalActive! &&
-                                              item!.isHalalItem!
-                                          ? const CustomAssetImageWidget(
-                                              Images.halalTag,
-                                              height: 13,
-                                              width: 13)
-                                          : const SizedBox(),
-                                      SizedBox(
-                                          width: ResponsiveHelper.isDesktop(
-                                                  context)
-                                              ? 20
-                                              : 0),
-                                    ]),
-                                const SizedBox(height: 3),
-                                inStore
-                                    ? const SizedBox()
-                                    : (isStore
-                                            ? store!.address != null
-                                            : item!.storeName != null)
-                                        ? Text(
-                                            isStore
-                                                ? store!.address ?? ''
-                                                : item!.storeName ?? '',
-                                            style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeExtraSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          )
-                                        : const SizedBox(),
-                                (genericName.isNotEmpty)
-                                    ? Flexible(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Text(
-                                            genericName,
-                                            style: robotoMedium.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color: Theme.of(context)
-                                                  .disabledColor,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
+                                Flexible(
+                                  child: Text(
+                                    isStore ? store!.name! : item!.name!,
+                                    style: robotoBold.copyWith(
+                                        fontSize: Dimensions.fontSizeDefault,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(
+                                    width: Dimensions.paddingSizeExtraSmall),
+                                (!isStore &&
+                                        Get.find<SplashController>()
+                                            .configModel!
+                                            .moduleConfig!
+                                            .module!
+                                            .vegNonVeg! &&
+                                        Get.find<SplashController>()
+                                            .configModel!
+                                            .toggleVegNonVeg!)
+                                    ? Image.asset(
+                                        item != null && item!.veg == 0
+                                            ? Images.nonVegImage
+                                            : Images.vegImage,
+                                        height: 10,
+                                        width: 10,
+                                        fit: BoxFit.contain)
+                                    : const SizedBox(),
+                                (Get.find<SplashController>()
+                                            .configModel!
+                                            .moduleConfig!
+                                            .module!
+                                            .unit! &&
+                                        item != null &&
+                                        item!.unitType != null)
+                                    ? Text(
+                                        '(${item!.unitType ?? ''})',
+                                        style: robotoRegular.copyWith(
+                                            fontSize:
+                                                Dimensions.fontSizeExtraSmall,
+                                            color: Theme.of(context).hintColor),
                                       )
                                     : const SizedBox(),
                                 SizedBox(
-                                    height: ((desktop || isStore) &&
-                                            (isStore
-                                                ? store!.address != null
-                                                : item!.storeName != null))
-                                        ? 3
-                                        : 3),
-                                !isStore && (item!.ratingCount! > 0)
-                                    ? Row(children: [
-                                        ShaderMask(
-                                          shaderCallback: (bounds) => AppColors
-                                              .mainGradient
-                                              .createShader(bounds),
-                                          blendMode: BlendMode.srcIn,
-                                          child: Icon(Icons.star,
-                                              size: 16, color: Colors.white),
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        Text(
-                                          item!.avgRating!.toStringAsFixed(1),
-                                          style: robotoMedium.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall),
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        Text(
-                                          '(${item!.ratingCount})',
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color:
-                                                  Theme.of(context).hintColor),
-                                        ),
-                                      ])
-                                    : const SizedBox(),
-                                SizedBox(
-                                    height: (!isStore && desktop) ||
-                                            (!isStore &&
-                                                (item!.ratingCount! > 0))
-                                        ? 3
+                                    width: item!.isStoreHalalActive! &&
+                                            item!.isHalalItem!
+                                        ? Dimensions.paddingSizeExtraSmall
                                         : 0),
-                                isStore &&
-                                        (store != null &&
-                                            store!.ratingCount! > 0)
-                                    ? Row(children: [
-                                        ShaderMask(
-                                          shaderCallback: (bounds) => AppColors
-                                              .mainGradient
-                                              .createShader(bounds),
-                                          blendMode: BlendMode.srcIn,
-                                          child: Icon(Icons.star,
-                                              size: 16, color: Colors.white),
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        Text(
-                                          store!.avgRating!.toStringAsFixed(1),
-                                          style: robotoMedium,
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions
-                                                .paddingSizeExtraSmall),
-                                        Text(
-                                          '(${store!.ratingCount})',
-                                          style: robotoRegular.copyWith(
-                                              fontSize:
-                                                  Dimensions.fontSizeSmall,
-                                              color:
-                                                  Theme.of(context).hintColor),
-                                        ),
-                                      ])
-                                    : Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(children: [
-                                            ShaderMask(
-                                              shaderCallback: (bounds) {
-                                                return const LinearGradient(
-                                                  colors: [
-                                                    Color(0xFF34D47F),
-                                                    Color(0xFF21C0E5)
-                                                  ],
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                ).createShader(bounds);
-                                              },
-                                              blendMode: BlendMode.srcIn,
-                                              child: Text(
-                                                PriceConverter.convertPrice(
-                                                    item!.price,
-                                                    discount: discount,
-                                                    discountType: discountType),
-                                                style: robotoMedium.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeSmall),
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                                width: discount! > 0
-                                                    ? Dimensions
-                                                        .paddingSizeExtraSmall
-                                                    : 0),
-                                            discount > 0
-                                                ? Text(
-                                                    PriceConverter.convertPrice(
-                                                        item!.price),
-                                                    style:
-                                                        robotoMedium.copyWith(
-                                                      fontSize: Dimensions
-                                                          .fontSizeExtraSmall,
-                                                      color: Theme.of(context)
-                                                          .disabledColor,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                    ),
-                                                    textDirection:
-                                                        TextDirection.ltr,
-                                                  )
-                                                : const SizedBox(),
-                                          ]),
-                                          (discount > 0)
-                                              ? Text(
-                                                  discountType == 'percent'
-                                                      ? '$discount% ${'off'.tr}'
-                                                      : '${PriceConverter.convertPrice(discount)} ${'off'.tr}',
-                                                  style: robotoMedium.copyWith(
-                                                    fontSize: Dimensions
-                                                        .fontSizeExtraSmall,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .error,
-                                                  ),
-                                                )
-                                              : const SizedBox(),
-                                        ],
-                                      ),
+                                !isStore &&
+                                        item!.isStoreHalalActive! &&
+                                        item!.isHalalItem!
+                                    ? const CustomAssetImageWidget(
+                                        Images.halalTag,
+                                        height: 13,
+                                        width: 13)
+                                    : const SizedBox(),
                               ]),
+                          const SizedBox(height: 2),
+                          inStore
+                              ? const SizedBox()
+                              : (isStore
+                                      ? store!.address != null
+                                      : item!.storeName != null)
+                                  ? Text(
+                                      isStore
+                                          ? store!.address ?? ''
+                                          : item!.storeName ?? '',
+                                      style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  : const SizedBox(),
+                          (genericName.isNotEmpty)
+                              ? Flexible(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 2.0),
+                                    child: Text(
+                                      genericName,
+                                      style: robotoMedium.copyWith(
+                                        fontSize: Dimensions.fontSizeSmall,
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          const SizedBox(height: 2),
+                          !isStore && (item!.ratingCount! > 0)
+                              ? Row(children: [
+                                  ShaderMask(
+                                    shaderCallback: (bounds) => AppColors
+                                        .mainGradient
+                                        .createShader(bounds),
+                                    blendMode: BlendMode.srcIn,
+                                    child: Icon(Icons.star,
+                                        size: 14, color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    item!.avgRating!.toStringAsFixed(1),
+                                    style: robotoMedium.copyWith(
+                                        fontSize:
+                                            Dimensions.fontSizeExtraSmall),
+                                  ),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    '(${item!.ratingCount})',
+                                    style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).hintColor),
+                                  ),
+                                ])
+                              : const SizedBox(),
+                          isStore && (store != null && store!.ratingCount! > 0)
+                              ? Row(children: [
+                                  ShaderMask(
+                                    shaderCallback: (bounds) => AppColors
+                                        .mainGradient
+                                        .createShader(bounds),
+                                    blendMode: BlendMode.srcIn,
+                                    child: Icon(Icons.star,
+                                        size: 14, color: Colors.white),
+                                  ),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    store!.avgRating!.toStringAsFixed(1),
+                                    style: robotoMedium.copyWith(
+                                        fontSize:
+                                            Dimensions.fontSizeExtraSmall),
+                                  ),
+                                  const SizedBox(
+                                      width: Dimensions.paddingSizeExtraSmall),
+                                  Text(
+                                    '(${store!.ratingCount})',
+                                    style: robotoRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                        color: Theme.of(context).hintColor),
+                                  ),
+                                ])
+                              : const SizedBox(),
+                          const SizedBox(height: 2),
+                          !isStore
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      ShaderMask(
+                                        shaderCallback: (bounds) {
+                                          return const LinearGradient(
+                                            colors: [
+                                              Color(0xFF34D47F),
+                                              Color(0xFF21C0E5)
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ).createShader(bounds);
+                                        },
+                                        blendMode: BlendMode.srcIn,
+                                        child: Text(
+                                          PriceConverter.convertPrice(
+                                              item!.price,
+                                              discount: discount,
+                                              discountType: discountType),
+                                          style: robotoBold.copyWith(
+                                              fontSize:
+                                                  Dimensions.fontSizeDefault),
+                                          textDirection: TextDirection.ltr,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width: discount! > 0
+                                              ? Dimensions.paddingSizeExtraSmall
+                                              : 0),
+                                      discount > 0
+                                          ? Text(
+                                              PriceConverter.convertPrice(
+                                                  item!.price),
+                                              style: robotoMedium.copyWith(
+                                                fontSize: Dimensions
+                                                    .fontSizeExtraSmall,
+                                                color: Theme.of(context)
+                                                    .disabledColor,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                              textDirection: TextDirection.ltr,
+                                            )
+                                          : const SizedBox(),
+                                      const SizedBox(
+                                          width:
+                                              Dimensions.paddingSizeExtraSmall),
+                                      (discount > 0)
+                                          ? Text(
+                                              discountType == 'percent'
+                                                  ? '$discount% ${'off'.tr}'
+                                                  : '${PriceConverter.convertPrice(discount)} ${'off'.tr}',
+                                              style: robotoMedium.copyWith(
+                                                fontSize: Dimensions
+                                                    .fontSizeExtraSmall,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .error,
+                                              ),
+                                            )
+                                          : const SizedBox(),
+                                    ]),
+                                  ],
+                                )
+                              : const SizedBox(),
+                        ]),
+                  ),
+                  const SizedBox(width: Dimensions.paddingSizeSmall),
+                  Column(
+                      mainAxisAlignment: isStore
+                          ? MainAxisAlignment.center
+                          : MainAxisAlignment.spaceBetween,
+                      children: [
+                        GetBuilder<FavouriteController>(
+                            builder: (favouriteController) {
+                          bool isWished = isStore
+                              ? favouriteController.wishStoreIdList
+                                  .contains(store!.id)
+                              : favouriteController.wishItemIdList
+                                  .contains(item!.id);
+                          return CustomFavouriteWidget(
+                            isWished: isWished,
+                            isStore: isStore,
+                            store: store,
+                            item: item,
+                          );
+                        }),
+                        CartCountView(
+                          item: item!,
+                          index: index,
                         ),
-                        Column(
-                            mainAxisAlignment: isStore
-                                ? MainAxisAlignment.center
-                                : MainAxisAlignment.spaceBetween,
-                            children: [
-                              GetBuilder<FavouriteController>(
-                                  builder: (favouriteController) {
-                                bool isWished = isStore
-                                    ? favouriteController.wishStoreIdList
-                                        .contains(store!.id)
-                                    : favouriteController.wishItemIdList
-                                        .contains(item!.id);
-                                return CustomFavouriteWidget(
-                                  isWished: isWished,
-                                  isStore: isStore,
-                                  store: store,
-                                  item: item,
-                                );
-                              }),
-                              CartCountView(
-                                item: item!,
-                                index: index,
-                              ),
-                            ]),
                       ]),
-                    )),
-                  ]);
+                ]),
+              );
             }),
           ),
         ),

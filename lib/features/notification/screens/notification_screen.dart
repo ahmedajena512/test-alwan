@@ -218,18 +218,40 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                   .cardColor,
                                                           borderRadius: BorderRadius
                                                               .circular(Dimensions
-                                                                  .radiusDefault),
+                                                                  .radiusLarge),
                                                           boxShadow: isSeen
                                                               ? []
                                                               : [
-                                                                  const BoxShadow(
-                                                                      color: Colors
-                                                                          .black12,
-                                                                      blurRadius:
-                                                                          5,
-                                                                      spreadRadius:
-                                                                          1)
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.04),
+                                                                    blurRadius:
+                                                                        10,
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0,
+                                                                            4),
+                                                                  ),
                                                                 ],
+                                                          border: Border.all(
+                                                            color: isSeen
+                                                                ? Theme.of(
+                                                                        context)
+                                                                    .disabledColor
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            0.08)
+                                                                : Theme.of(
+                                                                        context)
+                                                                    .primaryColor
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            0.05),
+                                                            width: 1,
+                                                          ),
                                                         ),
                                                         padding: const EdgeInsets
                                                             .all(Dimensions
@@ -240,6 +262,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                     .start,
                                                             children: [
                                                               Container(
+                                                                padding: const EdgeInsets
+                                                                    .all(
+                                                                    Dimensions
+                                                                        .paddingSizeSmall),
                                                                 decoration:
                                                                     BoxDecoration(
                                                                   color: Theme.of(
@@ -247,37 +273,31 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                       .primaryColor
                                                                       .withValues(
                                                                           alpha:
-                                                                              0.05),
+                                                                              0.08),
                                                                   borderRadius:
                                                                       BorderRadius.circular(
                                                                           Dimensions
-                                                                              .radiusSmall),
+                                                                              .radiusDefault),
                                                                 ),
-                                                                padding: const EdgeInsets
-                                                                    .all(
-                                                                    Dimensions
-                                                                            .paddingSizeExtraSmall +
-                                                                        1),
-                                                                child:
-                                                                    CustomAssetImageWidget(
+                                                                child: Icon(
                                                                   notificationController
                                                                               .notificationList![
                                                                                   index]
                                                                               .data!
                                                                               .type ==
-                                                                          'push_notification'
-                                                                      ? Images
-                                                                          .pushNotificationIcon
+                                                                          'order_status'
+                                                                      ? Icons
+                                                                          .shopping_bag_rounded
                                                                       : notificationController.notificationList![index].data!.type ==
-                                                                              'order_status'
-                                                                          ? Images
-                                                                              .orderConfirmIcon
-                                                                          : Images
-                                                                              .referEarnIcon,
-                                                                  height: 30,
-                                                                  width: 30,
-                                                                  fit: BoxFit
-                                                                      .cover,
+                                                                              'push_notification'
+                                                                          ? Icons
+                                                                              .notifications_active_rounded
+                                                                          : Icons
+                                                                              .card_giftcard_rounded,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                  size: 20,
                                                                 ),
                                                               ),
                                                               const SizedBox(
@@ -311,13 +331,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                             child:
                                                                                 Text(
                                                                               DateConverter.dateTimeStringToFormattedTime(notificationController.notificationList![index].createdAt!),
-                                                                              style: robotoRegular.copyWith(color: Theme.of(context).textTheme.bodyLarge?.color, fontSize: Dimensions.fontSizeSmall),
+                                                                              style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: 10),
                                                                             ),
                                                                           ),
                                                                         ]),
                                                                     const SizedBox(
                                                                         height:
-                                                                            Dimensions.paddingSizeExtraSmall),
+                                                                            4),
                                                                     Row(
                                                                         crossAxisAlignment:
                                                                             CrossAxisAlignment.start,
@@ -328,7 +348,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                                               notificationController.notificationList![index].data!.description ?? '',
                                                                               maxLines: 2,
                                                                               overflow: TextOverflow.ellipsis,
-                                                                              style: robotoRegular.copyWith(color: isSeen ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7)),
+                                                                              style: robotoRegular.copyWith(
+                                                                                color: isSeen ? Theme.of(context).disabledColor : Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
+                                                                                fontSize: Dimensions.fontSizeSmall,
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                           const SizedBox(

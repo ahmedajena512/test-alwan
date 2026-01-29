@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <base href="/">
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -15,21 +16,24 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <meta name="google-signin-client_id" content="491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com">
+  <meta name="google-signin-client_id"
+    content="491987943015-agln6biv84krpnngdphj87jkko7r9lb8.apps.googleusercontent.com">
 
-  <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+  <script type="text/javascript"
+    src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
 
   <title>6amMart</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
+  <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
+    defer></script>
   <!--<link rel="canonical" href="https://6ammart-web.6amtech.com/" />-->
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = {{flutter_service_worker_version}};
+    var serviceWorkerVersion = {{ flutter_service_worker_version }};
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js?version=3.5.0" defer></script>
@@ -41,16 +45,16 @@
        https://developers.google.com/web/fundamentals/primers/service-workers -->
 
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_MAP_KEy"></script>
-<!--  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>-->
+  <!--  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>-->
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
-<!--  <div class="center">-->
-<!--    <img src="logo.png" alt = "logo" width="300px" />-->
-<!--    <br>-->
-<!--    <div class="loader" style="width:300px;text-align: center;"><div class="continuous-4"></div></div>-->
-<!--  </div>-->
+  <!--  <div class="center">-->
+  <!--    <img src="logo.png" alt = "logo" width="300px" />-->
+  <!--    <br>-->
+  <!--    <div class="loader" style="width:300px;text-align: center;"><div class="continuous-4"></div></div>-->
+  <!--  </div>-->
 
   <div class="preloader">
     <div class="preloader-container">
@@ -80,86 +84,86 @@
   <!-- Script Goes Here -->
   <script>
     // Check if localStorage is supported in the browser
-      if (typeof(Storage) !== "undefined") {
-        // Get the item from localStorage
-        var itemValue = localStorage.getItem("flutter.6ammart_theme");
-        // Check if the item exists
-        if (itemValue !== null) {
-          // Check the value of the item
-          if (itemValue === "true") {
-            // If the value is "true", add a class to the body
-            document.body.classList.add("theme-dark");
-          } else {
-            // If the value is not "true", remove the class from the body
-            document.body.classList.remove("theme-light");
-          }
+    if (typeof (Storage) !== "undefined") {
+      // Get the item from localStorage
+      var itemValue = localStorage.getItem("flutter.6ammart_theme");
+      // Check if the item exists
+      if (itemValue !== null) {
+        // Check the value of the item
+        if (itemValue === "true") {
+          // If the value is "true", add a class to the body
+          document.body.classList.add("theme-dark");
         } else {
-          console.log("Item not found in localStorage");
+          // If the value is not "true", remove the class from the body
+          document.body.classList.remove("theme-light");
         }
       } else {
-        console.log("localStorage is not supported in this browser");
+        console.log("Item not found in localStorage");
       }
+    } else {
+      console.log("localStorage is not supported in this browser");
+    }
 
   </script>
 
   <script>
     document.querySelectorAll("img.svg").forEach(function (img) {
-    var imgID = img.getAttribute("id");
-    var imgClass = img.getAttribute("class");
-    var imgURL = img.getAttribute("src");
-    // Create a new XMLHttpRequest
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", imgURL, true);
-    // Set the responseType to "document" to parse the response as an XML document
-    xhr.responseType = "document";
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        var data = xhr.response;
-        // Get the SVG tag from the response, ignore the rest
-        var svg = data.querySelector("svg");
-        // Add replaced image's ID to the new SVG
-        if (typeof imgID !== "undefined") {
-          svg.setAttribute("id", imgID);
+      var imgID = img.getAttribute("id");
+      var imgClass = img.getAttribute("class");
+      var imgURL = img.getAttribute("src");
+      // Create a new XMLHttpRequest
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", imgURL, true);
+      // Set the responseType to "document" to parse the response as an XML document
+      xhr.responseType = "document";
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var data = xhr.response;
+          // Get the SVG tag from the response, ignore the rest
+          var svg = data.querySelector("svg");
+          // Add replaced image's ID to the new SVG
+          if (typeof imgID !== "undefined") {
+            svg.setAttribute("id", imgID);
+          }
+          // Add replaced image's classes to the new SVG
+          if (typeof imgClass !== "undefined") {
+            svg.setAttribute("class", imgClass + " replaced-svg");
+          }
+          // Remove any invalid XML tags
+          svg.removeAttribute("xmlns:a");
+          // Check if the viewport is set; set it if not
+          if (!svg.getAttribute("viewBox") && svg.getAttribute("height") && svg.getAttribute("width")) {
+            svg.setAttribute("viewBox", "0 0 " + svg.getAttribute("height") + " " + svg.getAttribute("width"));
+          }
+          // Replace the image with the new SVG
+          img.parentNode.replaceChild(svg, img);
         }
-        // Add replaced image's classes to the new SVG
-        if (typeof imgClass !== "undefined") {
-          svg.setAttribute("class", imgClass + " replaced-svg");
-        }
-        // Remove any invalid XML tags
-        svg.removeAttribute("xmlns:a");
-        // Check if the viewport is set; set it if not
-        if (!svg.getAttribute("viewBox") && svg.getAttribute("height") && svg.getAttribute("width")) {
-          svg.setAttribute("viewBox", "0 0 " + svg.getAttribute("height") + " " + svg.getAttribute("width"));
-        }
-        // Replace the image with the new SVG
-        img.parentNode.replaceChild(svg, img);
-      }
-    };
-    xhr.send();
-  });
+      };
+      xhr.send();
+    });
   </script>
 
-<!--  <script>-->
-<!--    {{flutter_bootstrap_js}}-->
-<!--  </script>-->
+  <!--  <script>-->
+  <!--    {{flutter_bootstrap_js}}-->
+  <!--  </script>-->
 
   <script>
-    window.addEventListener('load', function(ev) {
-       {{flutter_js}}
-       {{flutter_build_config}}
+    window.addEventListener('load', function (ev) {
+      { { flutter_js } }
+      { { flutter_build_config } }
 
-       _flutter.loader.load({
-         serviceWorker: {
-           serviceWorkerVersion: {{flutter_service_worker_version}},
+      _flutter.loader.load({
+        serviceWorker: {
+          serviceWorkerVersion: {{ flutter_service_worker_version }},
          },
-         onEntrypointLoaded: function(engineInitializer) {
-         let config = { renderer: 'html' };
-           engineInitializer.initializeEngine(config).then(function(appRunner) {
-             if(document.getElementById('splash'))
-               document.getElementById('splash').remove();
-             appRunner.runApp();
-           });
-         }
+      onEntrypointLoaded: function (engineInitializer) {
+        let config = { renderer: 'html' };
+        engineInitializer.initializeEngine(config).then(function (appRunner) {
+          if (document.getElementById('splash'))
+            document.getElementById('splash').remove();
+          appRunner.runApp();
+        });
+      }
        });
      });
   </script>
@@ -174,14 +178,11 @@
     }
   </script>
 
-  <script>
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getAnalytics } from "firebase/analytics";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  <!-- Firebase Configuration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyDFN-73p8zKVZbA0i5DtO215XzAb-xuGSE",
       authDomain: "ammart-8885e.firebaseapp.com",
@@ -192,10 +193,17 @@
       appId: "1:1000163153346:web:4f702a4b5adbd5c906b25b",
       measurementId: "G-L1GNL2YV61"
     };
+
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    try {
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      console.log("Firebase initialized successfully");
+    } catch (e) {
+      console.error("Firebase initialization failed:", e);
+    }
   </script>
 
 </body>
+
 </html>

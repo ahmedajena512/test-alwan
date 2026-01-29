@@ -14,6 +14,10 @@ import 'package:sixam_mart/common/widgets/custom_image.dart';
 import 'package:sixam_mart/common/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sixam_mart/common/models/module_model.dart';
+import 'package:sixam_mart/features/location/domain/models/zone_response_model.dart';
+import 'package:sixam_mart/helper/address_helper.dart';
 
 class StoreDescriptionViewWidget extends StatelessWidget {
   final Store? store;
@@ -273,7 +277,7 @@ class StoreDescriptionViewWidget extends StatelessWidget {
                       child: _buildInfoItem(
                     context,
                     title: store!.deliveryTime!,
-                    subTitle: 'delivery_time'.tr,
+                    subTitle: 'estimated_time'.tr,
                     icon: Icons.timer,
                   )),
                   const VerticalDivider(width: 1),
@@ -281,15 +285,14 @@ class StoreDescriptionViewWidget extends StatelessWidget {
                       child: _buildInfoItem(
                     context,
                     title: _getDeliveryCharge(store!),
-                    subTitle: 'delivery_fee'.tr,
+                    subTitle: 'delivery'.tr,
                     icon: Icons.delivery_dining,
                   )),
                 ]),
               ),
             )
           : Container(
-              padding: const EdgeInsets.symmetric(
-                  vertical: Dimensions.paddingSizeSmall),
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault),
@@ -332,14 +335,14 @@ class StoreDescriptionViewWidget extends StatelessWidget {
                     child: _buildInfoItem(
                   context,
                   title: store!.deliveryTime!,
-                  subTitle: 'delivery'.tr,
+                  subTitle: 'estimated_time'.tr,
                   icon: Icons.timer,
                 )),
                 Expanded(
                     child: _buildInfoItem(
                   context,
                   title: _getDeliveryCharge(store!),
-                  subTitle: 'fee'.tr,
+                  subTitle: 'delivery'.tr,
                   icon: Icons.delivery_dining,
                 )),
               ]),
@@ -386,23 +389,67 @@ class StoreDescriptionViewWidget extends StatelessWidget {
   }
 
   String _getDeliveryCharge(Store store) {
-    if (store.freeDelivery! || store.selfDeliverySystem == 0) {
-      if (store.freeDelivery!) {
-        return 'free'.tr;
-      }
-      return 'calculating'.tr;
+    if (store.freeDelivery!) {
+      return 'free'.tr;
     }
 
-    double deliveryCharge = -1;
-    double? distance = store.distance;
+    double distance = Get.find<StoreController>().getRestaurantDistance(
+      LatLng(
+        double.parse(store.latitude!),
+        double.parse(store.longitude!),
+      ),
+    );
 
-    if (distance != null && distance != -1) {
-      double perKmCharge = store.perKmShippingCharge ?? 0;
-      double minimumCharge = store.minimumShippingCharge ?? 0;
-      double? maximumCharge = store.maximumShippingCharge;
+    double deliveryCharge = 0;
 
+    Pivot? moduleData;
+    if (Get.find<SplashController>().moduleList != null) {
+      for (ModuleModel module in Get.find<SplashController>().moduleList!) {
+        if (module.id == store.moduleId) {
+          if (AddressHelper.getUserAddressFromSharedPref()!.zoneData != null) {
+            for (ZoneData zData
+                in AddressHelper.getUserAddressFromSharedPref()!.zoneData!) {
+              for (Modules m in zData.modules!) {
+                if (m.id == module.id && m.pivot!.zoneId == store.zoneId) {
+                  moduleData = m.pivot;
+                  break;
+                }
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    double perKmCharge = 0;
+    double minimumCharge = 0;
+    double? maximumCharge = 0;
+
+    if (store.selfDeliverySystem == 1) {
+      perKmCharge = store.perKmShippingCharge ?? 0;
+      minimumCharge = store.minimumShippingCharge ?? 0;
+      maximumCharge = store.maximumShippingCharge;
+    } else if (store.selfDeliverySystem == 0 &&
+        moduleData != null &&
+        moduleData.deliveryChargeType == 'distance') {
+      perKmCharge = moduleData.perKmShippingCharge ?? 0;
+      minimumCharge = moduleData.minimumShippingCharge ?? 0;
+      maximumCharge = moduleData.maximumShippingCharge;
+    } else if (store.selfDeliverySystem == 0 &&
+        moduleData != null &&
+        moduleData.deliveryChargeType == 'fixed') {
+      perKmCharge = moduleData.fixedShippingCharge ?? 0;
+      minimumCharge = moduleData.fixedShippingCharge ?? 0;
+      maximumCharge = moduleData.fixedShippingCharge;
+    }
+
+    if (store.selfDeliverySystem == 0 &&
+        moduleData != null &&
+        moduleData.deliveryChargeType == 'fixed') {
+      deliveryCharge = minimumCharge;
+    } else {
       deliveryCharge = distance * perKmCharge;
-
       if (deliveryCharge < minimumCharge) {
         deliveryCharge = minimumCharge;
       } else if (maximumCharge != null && deliveryCharge > maximumCharge) {
@@ -410,7 +457,7 @@ class StoreDescriptionViewWidget extends StatelessWidget {
       }
     }
 
-    return deliveryCharge != -1
+    return deliveryCharge > 0
         ? PriceConverter.convertPrice(deliveryCharge)
         : 'calculating'.tr;
   }
